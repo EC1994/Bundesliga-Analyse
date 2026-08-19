@@ -1,0 +1,68 @@
+{
+  "primary": [
+    {
+      "id": "bundesliga",
+      "name": "Bundesliga / DFL",
+      "type": "rss_or_api",
+      "trust": 1.0,
+      "enabled": true
+    },
+    {
+      "id": "clubs",
+      "name": "Official club channels",
+      "type": "rss_or_api",
+      "trust": 1.0,
+      "enabled": true
+    }
+  ],
+  "sports_media": [
+    {
+      "id": "kicker",
+      "name": "kicker",
+      "type": "rss",
+      "trust": 0.9,
+      "enabled": true
+    },
+    {
+      "id": "sky",
+      "name": "Sky Sport",
+      "type": "rss",
+      "trust": 0.88,
+      "enabled": true
+    },
+    {
+      "id": "sport1",
+      "name": "SPORT1",
+      "type": "rss",
+      "trust": 0.84,
+      "enabled": true
+    },
+    {
+      "id": "sportschau",
+      "name": "Sportschau",
+      "type": "rss",
+      "trust": 0.9,
+      "enabled": true
+    },
+    {
+      "id": "reuters",
+      "name": "Reuters",
+      "type": "rss_or_api",
+      "trust": 0.96,
+      "enabled": true
+    },
+    {
+      "id": "transfermarkt",
+      "name": "Transfermarkt",
+      "type": "rss_or_api",
+      "trust": 0.88,
+      "enabled": true
+    }
+  ],
+  "policy": {
+    "only_configured_feeds": true,
+    "store_headline_excerpt_url": true,
+    "do_not_copy_full_articles": true,
+    "respect_robots_and_terms": true
+  }
+}

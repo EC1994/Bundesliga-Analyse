@@ -1,202 +1,50 @@
-<!doctype html>
-<html lang="de">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Bundesliga Hub — News, Transfers, Verletzungen & Aufstellungen</title>
-<meta name="description" content="Bundesliga Hub: News, Transfers, Verletzungen, Gerüchte, Tabellen und voraussichtliche Aufstellungen aller Bundesliga-Vereine.">
-<style>
-:root{--bg:#f4f6f8;--card:#fff;--text:#101828;--muted:#667085;--line:#e4e7ec;--accent:#e11d48;--dark:#111827;--green:#16a34a;--yellow:#d97706;--red:#dc2626;--blue:#2563eb;--shadow:0 8px 30px rgba(16,24,40,.07)}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--text)}
-button,input,select{font:inherit}button{cursor:pointer}
-.top{background:#0b1220;color:#fff}.wrap{max-width:1220px;margin:auto;padding:0 18px}
-.nav{height:68px;display:flex;align-items:center;gap:28px}.logo{font-weight:900;font-size:22px;letter-spacing:-.7px}.logo span{color:#fb7185}.navlinks{display:flex;gap:20px;font-size:14px}.navlinks button{background:none;border:0;color:#d0d5dd}.navlinks button:hover{color:#fff}.search{margin-left:auto;background:#182235;border:1px solid #344054;border-radius:10px;color:#fff;padding:9px 12px;width:220px}
-.hero{padding:30px 0 18px}.hero h1{font-size:36px;line-height:1.05;margin:0 0 8px}.hero p{margin:0;color:var(--muted)}
-.grid{display:grid;grid-template-columns:1.45fr .9fr;gap:18px}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);overflow:hidden}.cardpad{padding:18px}.sectiontitle{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.sectiontitle h2{font-size:18px;margin:0}.tag{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;padding:5px 8px;border-radius:999px;background:#fce7f3;color:#be123c}
-.newshero{min-height:260px;padding:24px;display:flex;flex-direction:column;justify-content:flex-end;background:linear-gradient(135deg,#111827,#334155);color:#fff}.newshero h2{font-size:28px;max-width:700px;margin:8px 0}.newshero p{color:#d0d5dd;max-width:700px;margin:0}.meta{font-size:12px;color:var(--muted)}.newshero .meta{color:#cbd5e1}
-.rows{display:flex;flex-direction:column}.row{padding:13px 0;border-bottom:1px solid var(--line);display:flex;gap:12px;align-items:flex-start}.row:last-child{border-bottom:0}.dot{width:8px;height:8px;border-radius:50%;background:var(--accent);margin-top:6px;flex:none}.row b{display:block;font-size:14px;line-height:1.35}.row small{color:var(--muted)}
-.tabs{display:flex;gap:8px;overflow:auto;padding-bottom:4px}.tab{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 12px;font-size:13px;white-space:nowrap}.tab.active{background:var(--dark);color:#fff;border-color:var(--dark)}
-.table{width:100%;border-collapse:collapse;font-size:13px}.table th,.table td{padding:10px 8px;border-bottom:1px solid var(--line);text-align:left}.table th{color:var(--muted);font-weight:700}.rank{width:28px;color:var(--muted)}.club{font-weight:700}.club span{display:inline-flex;width:25px;height:25px;border-radius:7px;align-items:center;justify-content:center;background:#eef2f6;font-size:10px;margin-right:7px}
-.teamgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.team{padding:14px;border:1px solid var(--line);border-radius:13px;background:#fff;text-align:left;transition:.15s}.team:hover{transform:translateY(-2px);box-shadow:var(--shadow)}.team .crest{width:40px;height:40px;border-radius:11px;background:#eef2f6;display:grid;place-items:center;font-weight:900;margin-bottom:9px}.team strong{display:block;font-size:14px}.team small{color:var(--muted)}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}.pill{font-size:11px;font-weight:800;padding:4px 7px;border-radius:999px}.green{background:#dcfce7;color:#166534}.yellow{background:#fef3c7;color:#92400e}.red{background:#fee2e2;color:#991b1b}.blue{background:#dbeafe;color:#1d4ed8}
-.lineitem{display:flex;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}.lineitem:last-child{border-bottom:0}.lineitem b{font-size:13px}.lineitem small{display:block;color:var(--muted);margin-top:3px}
-.pred{display:grid;grid-template-columns:1fr 2fr 1fr;gap:10px;align-items:center}.formation{background:#ecfdf3;border:1px solid #bbf7d0;border-radius:12px;padding:12px;text-align:center}.pitch{background:linear-gradient(#e8f7ed,#d8f1df);border:1px solid #b7d8bf;border-radius:14px;padding:14px}.players{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.player{background:#fff;border:1px solid #d7e1d9;border-radius:9px;padding:8px;text-align:center;font-size:11px}.player.gk{grid-column:2}
-.comments{margin-top:16px;border-top:1px solid var(--line);padding-top:14px}.comment{padding:12px 0;border-bottom:1px solid var(--line)}.comment b{font-size:12px}.comment p{margin:4px 0 8px;font-size:13px;color:#344054}.voteRow{display:flex;gap:7px;align-items:center;flex-wrap:wrap}.voteBtn{border:1px solid var(--line);background:#fff;border-radius:999px;padding:5px 9px;font-size:12px}.voteBtn:hover{background:#f2f4f7}.voteBtn.active{background:#eef2ff;border-color:#a5b4fc}.replyBtn{border:0;background:none;color:var(--blue);font-size:12px;padding:5px}.replies{margin:8px 0 0 18px;padding-left:12px;border-left:2px solid var(--line)}.reply{font-size:12px;padding:6px 0}.replybox{display:flex;gap:6px;margin-top:5px}.replybox input{flex:1;border:1px solid var(--line);border-radius:8px;padding:7px}.replybox button{border:0;border-radius:8px;background:var(--dark);color:#fff;padding:7px 9px;font-size:12px}.commentbox{display:flex;gap:8px;margin-top:10px}.commentbox input{flex:1;border:1px solid var(--line);border-radius:10px;padding:10px}.commentbox button{border:0;border-radius:10px;background:var(--dark);color:#fff;padding:10px 14px}
-.modal{position:fixed;inset:0;background:rgba(15,23,42,.55);display:none;align-items:center;justify-content:center;padding:18px;z-index:10}.modal.open{display:flex}.modalbox{background:#fff;border-radius:18px;max-width:760px;width:100%;max-height:90vh;overflow:auto;padding:22px}.close{float:right;border:0;background:#f2f4f7;border-radius:8px;width:34px;height:34px}
-footer{margin-top:35px;padding:28px 0;color:var(--muted);font-size:12px}
-@media(max-width:900px){.grid,.two{grid-template-columns:1fr}.teamgrid{grid-template-columns:repeat(2,1fr)}.navlinks{display:none}.search{width:160px}.hero h1{font-size:30px}}
-@media(max-width:560px){.nav{gap:10px}.logo{font-size:18px}.search{width:130px}.teamgrid{grid-template-columns:1fr}.pred{grid-template-columns:1fr}.players{grid-template-columns:repeat(2,1fr)}.player.gk{grid-column:auto}}
-.clubDropdownBtn{display:block;width:100%;text-align:left;background:none;border:0;color:#fff;padding:9px 10px;border-radius:8px;font-size:13px}.clubDropdownBtn:hover{background:#263244}.clubHero{display:flex;align-items:center;gap:16px}.clubLogo{width:70px;height:70px;object-fit:contain;background:#f2f4f7;border-radius:16px;padding:8px}.playergrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.playercard{border:1px solid var(--line);border-radius:14px;padding:12px;background:#fff}.playerimg{width:100%;aspect-ratio:1;border-radius:12px;object-fit:cover;background:#eef2f6}.playercard b{display:block;margin-top:8px}.playercard small{color:var(--muted)}@media(max-width:700px){.playergrid{grid-template-columns:repeat(2,1fr)}}</style>
-</head>
-<body>
-<header class="top"><div class="wrap nav">
-  <div class="logo">BUNDESLIGA <span>HUB</span></div>
-  <div class="navlinks"><div class="clubMenu" style="position:relative">
-<button onclick="toggleClubMenu()" style="background:none;border:0;color:#d0d5dd;font-size:14px">Vereine ▾</button>
-<div id="clubDropdown" style="display:none;position:absolute;top:34px;left:-12px;background:#111827;border:1px solid #344054;border-radius:12px;padding:8px;min-width:250px;max-height:420px;overflow:auto;z-index:20"></div>
-</div>
-    <button onclick="scrollToId('news')">News</button><button onclick="scrollToId('transfers')">Transfers</button>
-    <button onclick="scrollToId('teams')">Vereine</button><button onclick="scrollToId('table')">Tabelle</button><button onclick="scrollToId('live')">Live</button>
-  </div>
-  <input class="search" id="search" placeholder="Verein oder Spieler suchen…" oninput="filterTeams()">
-</div></header>
-
-<main class="wrap">
-<section class="hero"><h1>Alles Bundesliga. Ein Hub.</h1><p>News, Transfers, Verletzungen, Gerüchte und voraussichtliche Aufstellungen — zentral und übersichtlich.</p></section>
-
-<section id="news" class="grid">
-  <div class="card">
-    <div class="newshero"><span class="tag">Saison 2026/27</span><h2>Der Bundesliga Hub ist bereit für den Saisonstart.</h2><p>Die neue Saison beginnt am 28. August 2026 mit Bayern München gegen VfB Stuttgart.</p><div class="meta">Datenstand: 20.08.2026 · Quelle für Spielplan: DFL/Bundesliga</div></div>
-    <div class="cardpad">
-      <div class="sectiontitle"><h2>Top-News</h2><span class="tag">LIVE</span></div>
-      <div class="rows" id="newsRows"></div>
-    </div>
-  </div>
-  <aside class="card cardpad" id="transfers">
-    <div class="sectiontitle"><h2>Transfer-Radar</h2><span class="tag">Heute</span></div>
-    <div class="tabs"><button class="tab active" onclick="setTransferTab('all',this)">Alle</button><button class="tab" onclick="setTransferTab('fixed',this)">Fix</button><button class="tab" onclick="setTransferTab('rumor',this)">Gerücht</button></div>
-    <div id="transferRows" class="rows" style="margin-top:8px"></div>
-  </aside>
-</section>
-
-<section class="two">
-  <div class="card cardpad">
-    <div class="sectiontitle"><h2>Verletzungen & Sperren</h2><span class="tag">Update</span></div>
-    <div id="injuryRows"></div>
-  </div>
-  <div class="card cardpad">
-    <div class="sectiontitle"><h2>Voraussichtliche Aufstellungen</h2><span class="tag">Prognose</span></div>
-    <div id="lineupRows"></div>
-  </div>
-</section>
-
-<section id="teams" class="card cardpad" style="margin-top:18px">
-  <div class="sectiontitle"><h2>Alle 18 Bundesliga-Vereine</h2><span class="meta">2026/27</span></div>
-  <div class="teamgrid" id="teamGrid"></div>
-</section>
-
-<section id="table" class="card cardpad" style="margin-top:18px">
-  <div class="sectiontitle"><h2>Tabelle</h2><span class="meta">vor Saisonstart</span></div>
-  <table class="table"><thead><tr><th>#</th><th>Verein</th><th>Sp</th><th>TD</th><th>Pkt</th></tr></thead><tbody id="tableBody"></tbody></table>
-</section>
-
-
-<section class="card cardpad" style="margin-top:18px">
-<div class="sectiontitle"><h2>Multi-Source News</h2><span class="tag">Quellenabgleich</span></div>
-<div id="aggregatedNews"><div class="meta">Lade Nachrichten…</div></div>
-</section><section id="live" class="card cardpad" style="margin-top:18px">
-  <div class="sectiontitle"><h2>Live-Daten</h2><span class="tag" id="liveStatus">SYNC</span></div>
-  <div class="two">
-    <div>
-      <h3>Spiele & Ergebnisse</h3>
-      <div id="matchesLive"><div class="meta">Lade Daten…</div></div>
-    </div>
-    <div>
-      <h3>Live-Tabelle</h3>
-      <div id="tableLive"><div class="meta">Lade Daten…</div></div>
-    </div>
-  </div>
-</section>
-
-<footer>Bundesliga Hub · Demo-Frontend. Für einen echten Livebetrieb sollten News, Transfers, Verletzungen, Kader, Aufstellungen und Kommentare über ein Backend bzw. lizenzierte Datenquellen gespeist werden.</footer>
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bundesliga Hub</title><style>
+:root{--bg:#f4f6f8;--card:#fff;--ink:#101828;--muted:#667085;--line:#e4e7ec;--nav:#0b1220;--accent:#e11d48;--good:#16a34a;--warn:#d97706;--bad:#dc2626;--shadow:0 10px 35px #10182812}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}.top{background:var(--nav);color:#fff;position:sticky;top:0;z-index:20}.wrap{max-width:1250px;margin:auto;padding:0 18px}.nav{height:68px;display:flex;align-items:center;gap:22px}.brand{font-weight:950;font-size:20px;white-space:nowrap}.brand i{color:#fb7185;font-style:normal}.menu{display:flex;gap:4px;overflow:auto}.menu button{border:0;background:transparent;color:#cbd5e1;padding:10px 12px;border-radius:9px;white-space:nowrap}.menu button.active,.menu button:hover{background:#1f2937;color:#fff}.search{margin-left:auto;width:200px;background:#182235;border:1px solid #344054;color:#fff;padding:9px 11px;border-radius:10px}.page{padding:25px 0 50px}.view{display:none}.view.active{display:block}.hero{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:18px}.hero h1{font-size:36px;letter-spacing:-1px;margin:0}.hero p{color:var(--muted);margin:7px 0 0}.grid{display:grid;grid-template-columns:1.35fr .8fr;gap:18px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:18px}.title{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}.title h2{margin:0;font-size:18px}.tag{font-size:11px;font-weight:800;padding:5px 8px;border-radius:99px;background:#fce7f3;color:#be123c}.row{display:flex;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}.row:last-child{border-bottom:0}.row b{font-size:14px}.row small{display:block;color:var(--muted);margin-top:3px}.status{padding:4px 7px;border-radius:99px;font-size:11px;font-weight:800;white-space:nowrap}.good{background:#dcfce7;color:#166534}.warn{background:#fef3c7;color:#92400e}.bad{background:#fee2e2;color:#991b1b}.blue{background:#dbeafe;color:#1d4ed8}.tabs{display:flex;gap:8px;overflow:auto;margin-bottom:12px}.tabs button{border:1px solid var(--line);background:#fff;border-radius:99px;padding:8px 12px}.tabs button.active{background:#111827;color:#fff}.clubgrid,.playergrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.club,.player{background:#fff;border:1px solid var(--line);border-radius:14px;padding:12px;cursor:pointer;text-align:left}.club:hover,.player:hover{box-shadow:var(--shadow);transform:translateY(-1px)}.logo{height:55px;width:55px;object-fit:contain;background:#f2f4f7;border-radius:12px;padding:7px}.player img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;background:#eef2f6}.player b,.club b{display:block;margin-top:8px}.muted{color:var(--muted);font-size:12px}.table{width:100%;border-collapse:collapse;font-size:13px}.table th,.table td{padding:10px 7px;border-bottom:1px solid var(--line);text-align:left}.modal{display:none;position:fixed;inset:0;background:#0f172a99;z-index:50;padding:18px;align-items:center;justify-content:center}.modal.open{display:flex}.modalbox{background:#fff;width:min(1000px,100%);max-height:92vh;overflow:auto;border-radius:18px;padding:22px}.close{float:right;border:0;background:#f2f4f7;border-radius:8px;width:34px;height:34px}.comments{border-top:1px solid var(--line);margin-top:18px;padding-top:14px}.comment{padding:12px 0;border-bottom:1px solid var(--line)}.comment p{margin:4px 0 8px}.vote{display:flex;gap:7px}.vote button,.replybtn{border:1px solid var(--line);background:#fff;border-radius:99px;padding:6px 10px;font-size:12px}.replybtn{border:0;color:#2563eb}.replybox,.commentbox{display:flex;gap:8px;margin-top:8px}.commentbox input,.replybox input{flex:1;border:1px solid var(--line);border-radius:10px;padding:10px}.commentbox button,.replybox button{border:0;background:#111827;color:#fff;border-radius:10px;padding:10px 13px}.pitch{background:linear-gradient(90deg,#e8f7ed,#d7efdc);border:1px solid #b8d5bd;border-radius:15px;padding:18px}.playerspitch{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.chip{background:#fff;border:1px solid #d6e1d8;border-radius:9px;padding:9px;text-align:center;font-size:12px}.source{font-size:11px;color:var(--muted)}.mobilemenu{display:none}
+@media(max-width:950px){.menu{display:none}.mobilemenu{display:block;margin-left:auto}.grid,.grid2{grid-template-columns:1fr}.clubgrid,.playergrid{grid-template-columns:repeat(3,1fr)}.search{width:150px}}
+@media(max-width:600px){.nav{height:62px}.brand{font-size:17px}.search{width:120px}.clubgrid,.playergrid{grid-template-columns:repeat(2,1fr)}.hero{display:block}.hero h1{font-size:29px}}
+</style></head><body>
+<header class="top"><div class="wrap nav"><div class="brand">BUNDESLIGA <i>HUB</i></div><nav class="menu" id="menu"></nav><input class="search" id="search" placeholder="Suche…" oninput="globalSearch()"><button class="mobilemenu" onclick="toggleMobile()">☰</button></div></header>
+<main class="wrap page">
+<section class="view active" id="home"><div class="hero"><div><h1>Alles Bundesliga. Ein Hub.</h1><p>News, Transfers, Verletzungen, Aufstellungen, Live-Daten und Spielerprofile.</p></div><span class="tag">2026/27</span></div><div class="grid"><div class="card"><div class="title"><h2>Top-News</h2><span class="tag">Multi-Source</span></div><div id="homeNews"></div></div><div class="card"><div class="title"><h2>Nächste Spiele</h2><span class="tag">LIVE</span></div><div id="homeMatches"></div></div></div></section>
+<section class="view" id="live"><div class="hero"><div><h1>Live</h1><p>Spielstände und Ereignisse werden automatisch aktualisiert.</p></div><span class="tag" id="liveBadge">●</span></div><div class="card"><div id="liveMatches"></div></div></section>
+<section class="view" id="news"><div class="hero"><div><h1>News</h1><p>Zusammengeführt aus konfigurierten seriösen Quellen.</p></div></div><div class="card"><div id="newsList"></div></div></section>
+<section class="view" id="transfers"><div class="hero"><div><h1>Transfers & Gerüchte</h1><p>Bestätigte Transfers und Meldungen getrennt voneinander.</p></div></div><div class="grid2"><div class="card"><div class="title"><h2>Transfers</h2></div><div id="transferList"></div></div><div class="card"><div class="title"><h2>Gerüchte</h2></div><div id="rumorList"></div></div></div></section>
+<section class="view" id="injuries"><div class="hero"><div><h1>Verletzungen & Sperren</h1><p>Aktueller Verfügbarkeitsstatus.</p></div></div><div class="card"><div id="injuryList"></div></div></section>
+<section class="view" id="lineups"><div class="hero"><div><h1>Aufstellungen</h1><p>Voraussichtliche und bestätigte Startelf.</p></div></div><div class="card"><div id="lineupList"></div></div></section>
+<section class="view" id="table"><div class="hero"><div><h1>Tabelle</h1><p>Automatisch aus der Datenquelle.</p></div></div><div class="card"><div id="tableList"></div></div></section>
+<section class="view" id="clubs"><div class="hero"><div><h1>Vereine</h1><p>Alle 18 Clubs mit Kader, Wappen, Spielern, Transfers und News.</p></div></div><div class="card"><div class="clubgrid" id="clubGrid"></div></div></section>
+<section class="view" id="players"><div class="hero"><div><h1>Spieler</h1><p>Spielerprofile mit Bild, Position und Saisonstatistiken.</p></div></div><div class="card"><div class="playergrid" id="playerGrid"></div></div></section>
 </main>
-
-<div class="modal" id="modal"><div class="modalbox"><button class="close" onclick="closeModal()">×</button><div id="modalContent"></div></div></div>
-
+<div class="modal" id="modal"><div class="modalbox"><button class="close" onclick="closeModal()">×</button><div id="modalBody"></div></div></div>
 <script>
-const teams=[
-["FC Bayern München","FCB"],["Borussia Dortmund","BVB"],["RB Leipzig","RBL"],["VfB Stuttgart","VFB"],["TSG Hoffenheim","TSG"],["Bayer 04 Leverkusen","B04"],["SC Freiburg","SCF"],["Eintracht Frankfurt","SGE"],["FC Augsburg","FCA"],["1. FSV Mainz 05","M05"],["1. FC Union Berlin","FCU"],["Borussia Mönchengladbach","BMG"],["Hamburger SV","HSV"],["1. FC Köln","KOE"],["SV Werder Bremen","SVW"],["FC Schalke 04","S04"],["SV Elversberg","ELV"],["SC Paderborn 07","SCP"]
-];
-const news=[
-["Transfer","Bundesliga-Transfermarkt: Die wichtigsten Bewegungen im Überblick","Heute"],
-["Aufstellung","Wer steht am ersten Spieltag in der Startelf?","Heute"],
-["Verletzung","Verletzungs-Check: Diese Spieler fehlen aktuell","Heute"],
-["Spielplan","Bayern eröffnet die Saison gegen Stuttgart","28.08.2026"]
-];
-const transfers=[
-["fixed","Bayern München","Neuzugang","Fix bestätigt"],
-["fixed","Borussia Dortmund","Abgang","Fix bestätigt"],
-["rumor","RB Leipzig","Mittelfeld","Gerücht"],
-["rumor","Bayer Leverkusen","Stürmer","Interesse"]
-];
-const injuries=[
-["FC Bayern München","Spielerstatus prüfen","yellow"],["Borussia Dortmund","Spielerstatus prüfen","yellow"],["RB Leipzig","Spielerstatus prüfen","yellow"],["VfB Stuttgart","Spielerstatus prüfen","green"]
-];
-const lineups=[
-["FC Bayern München","4-2-3-1","Neuer · Tah · Upamecano · Davies · Kimmich · Pavlovic · Olise · Musiala · Sané · Kane"],
-["Borussia Dortmund","4-3-3","Kobel · Ryerson · Schlotterbeck · Süle · Bensebaini · Brandt · Sabitzer · Can · Adeyemi · Guirassy"]
-];
-
-
-async function loadClubMenu(){
- const menu=document.getElementById("clubDropdown");
- menu.innerHTML=teams.map((t,i)=>`<button class="clubDropdownBtn" onclick="openTeam(${i});toggleClubMenu()">⚽ ${t[0]}</button>`).join("");
-}
-function toggleClubMenu(){const e=document.getElementById("clubDropdown");e.style.display=e.style.display==="none"?"block":"none"}
-
-function renderNews(){newsRows.innerHTML=news.map(n=>`<div class="row" onclick="openNews('${n[0]}')"><i class="dot"></i><div><b>${n[1]}</b><small>${n[0]} · ${n[2]}</small></div></div>`).join("")}
-function renderTransfers(kind="all"){transferRows.innerHTML=transfers.filter(t=>kind==="all"||t[0]===kind).map(t=>`<div class="lineitem"><div><b>${t[1]}</b><small>${t[2]}</small></div><span class="pill ${t[0]==="fixed"?"green":"yellow"}">${t[3]}</span></div>`).join("")}
-function setTransferTab(k,el){document.querySelectorAll("#transfers .tab").forEach(x=>x.classList.remove("active"));el.classList.add("active");renderTransfers(k)}
-function renderInjuries(){injuryRows.innerHTML=injuries.map(x=>`<div class="lineitem"><div><b>${x[0]}</b><small>${x[1]}</small></div><span class="pill ${x[2]}">${x[2]==="green"?"fit":"Check"}</span></div>`).join("")}
-function renderLineups(){lineupRows.innerHTML=lineups.map(x=>`<div class="lineitem" style="cursor:pointer" onclick="openLineup('${x[0]}','${x[1]}','${x[2]}')"><div><b>${x[0]}</b><small>${x[1]}</small></div><span class="pill blue">XI</span></div>`).join("")}
-function renderTeams(){teamGrid.innerHTML=teams.map((t,i)=>`<button class="team" data-name="${t[0].toLowerCase()}" onclick="openTeam(${i})"><div class="crest">${t[1]}</div><strong>${t[0]}</strong><small>News · Transfers · Kader · XI</small></button>`).join("")}
-function filterTeams(){let q=search.value.toLowerCase();document.querySelectorAll(".team").forEach(x=>x.style.display=x.dataset.name.includes(q)?"block":"none")}
-function renderTable(){tableBody.innerHTML=teams.map((t,i)=>`<tr><td class="rank">${i+1}</td><td class="club"><span>${t[1]}</span>${t[0]}</td><td>0</td><td>0:0</td><td>0</td></tr>`).join("")}
-async function openTeam(i){
- let t=teams[i];
- modalContent.innerHTML=`<div class="clubHero"><div class="clubLogo">${t[1]}</div><div><h2>${t[0]}</h2><p class="meta">Kader · News · Transfers · Verletzungen · Spiele · Startelf</p></div></div><hr><div id="clubData"><div class="meta">Lade Vereinsdaten…</div></div>`;
- modal.classList.add("open");
- try{
-   const r=await fetch("/api/team/"+encodeURIComponent(t[0])); const d=await r.json();
-   if(!d.ok){document.getElementById("clubData").innerHTML="<p>Für diesen Verein sind aktuell keine vollständigen Spielerdaten von der konfigurierten Datenquelle verfügbar.</p>";return}
-   const players=d.players||[];
-   document.getElementById("clubData").innerHTML=`<h3>Kader (${players.length})</h3><div class="playergrid">${players.map(x=>`<div class="playercard"><img class="playerimg" src="${x.photo||'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22%3E%3Crect width=%22200%22 height=%22200%22 fill=%22%23eef2f6%22/%3E%3Ctext x=%22100%22 y=%22110%22 text-anchor=%22middle%22 font-size=%2230%22 fill=%22%23667085%22%3E%3F%3C/text%3E%3C/svg%3E'}" alt="${esc(x.name||'Spieler')}" loading="lazy"><b>${esc(x.name||"Unbekannt")}</b><small>${esc(x.position||"")}${x.number?` · #${x.number}`:""}</small></div>`).join("")}</div><div class="comments"><h3>Vereins-Community</h3><div id="comments-team-${i}"></div><div class="commentbox"><input id="cinput" placeholder="Kommentar schreiben…"><button onclick="addComment('team-${i}')">Posten</button></div></div>`;
-   loadComments(`team-${i}`);
- }catch(e){document.getElementById("clubData").innerHTML="<p>Vereinsdaten konnten gerade nicht geladen werden.</p>"}
-}
-function openNews(type){modalContent.innerHTML=`<h2>${type}</h2><p>Hier wird im Livebetrieb der vollständige Beitrag mit Quelle, Zeitstempel, Vereinsbezug und Community-Diskussion angezeigt.</p><div class="comments"><h3>Kommentare</h3><div id="comments-news-${type}"></div><div class="commentbox"><input id="cinput" placeholder="Kommentar schreiben…"><button onclick="addComment('news-${type}')">Posten</button></div></div>`;modal.classList.add("open")}
-function openLineup(team,formation,players){modalContent.innerHTML=`<h2>${team} — voraussichtliche Startelf</h2><p class="meta">Formation: ${formation}</p><div class="pitch"><div class="players">${players.split(" · ").map((p,i)=>`<div class="player ${i===0?"gk":""}">${p}</div>`).join("")}</div></div><div class="comments"><h3>Aufstellung diskutieren</h3><div id="comments-lineup-${team}"></div><div class="commentbox"><input id="cinput" placeholder="Kommentar schreiben…"><button onclick="addComment('lineup-${team}')">Posten</button></div></div>`;modal.classList.add("open")}
-const community={};
-const voterKey=localStorage.getItem("voterKey")||(()=>{const k="v-"+crypto.randomUUID();localStorage.setItem("voterKey",k);return k})();
-async function loadComments(key){const r=await fetch("/api/comments?post="+encodeURIComponent(key));const data=await r.json();community[key]=data;renderComments(key)}
-function renderComments(key){
- const el=document.getElementById("comments-"+key); if(!el)return;
- const arr=community[key]||[];
- el.innerHTML=arr.map(c=>`<div class="comment"><b>${esc(c.user_name)}</b><p>${esc(c.text)}</p>
- <div class="voteRow"><button class="voteBtn" onclick="vote(${c.id},'${key}',1)">👍 <span>${c.up}</span></button><button class="voteBtn" onclick="vote(${c.id},'${key}',-1)">👎 <span>${c.down}</span></button><button class="replyBtn" onclick="toggleReply(${c.id})">↩️ Antworten (${c.replies.length})</button></div>
- <div class="replies" id="replies-${c.id}" style="display:none">${c.replies.map(r=>`<div class="reply"><b>${esc(r.user_name)}:</b> ${esc(r.text)}</div>`).join("")}<div class="replybox"><input id="reply-${c.id}" placeholder="Antwort schreiben…"><button onclick="addReply('${key}',${c.id})">Antworten</button></div></div></div>`).join("");
-}
-function esc(v){return String(v).replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]))}
-async function vote(id,key,value){await fetch("/api/vote",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({commentId:id,voterKey,value})});loadComments(key)}
-function toggleReply(id){const e=document.getElementById("replies-"+id);if(e)e.style.display=e.style.display==="none"?"block":"none"}
-async function addReply(key,id){const inp=document.getElementById("reply-"+id),v=inp.value.trim();if(!v)return;await fetch("/api/replies",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({commentId:id,text:v,userName:"Du"})});await loadComments(key)}
-async function addComment(key){const inp=document.getElementById("cinput"),v=inp.value.trim();if(!v)return;await fetch("/api/comments",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({postKey:key,text:v,userName:"Du"})});inp.value="";await loadComments(key)}
-
-function scrollToId(id){document.getElementById(id).scrollIntoView({behavior:"smooth"})}
-loadClubMenu();renderNews();renderTransfers();renderInjuries();renderLineups();renderTeams();renderTable();
-
-async function loadLiveData(){
-  try{
-    const r=await fetch("/api/live");
-    const d=await r.json();
-    const m=document.getElementById("matchesLive"), t=document.getElementById("tableLive");
-    document.getElementById("liveStatus").textContent=d.ok?"LIVE":"OFFLINE";
-    if(d.matches?.length){
-      m.innerHTML=d.matches.slice(0,12).map(x=>`<div class="lineitem"><div><b>${esc(x.team1?.teamName||"—")} – ${esc(x.team2?.teamName||"—")}</b><small>${x.matchDateTime||""}</small></div><strong>${x.matchResults?.length?x.matchResults[x.matchResults.length-1].pointsTeam1+" : "+x.matchResults[x.matchResults.length-1].pointsTeam2:"–"}</strong></div>`).join("");
-    }else m.innerHTML='<div class="meta">Noch keine Spiele gefunden.</div>';
-    if(d.table?.length){
-      t.innerHTML=`<table class="table"><thead><tr><th>#</th><th>Verein</th><th>Sp</th><th>TD</th><th>Pkt</th></tr></thead><tbody>${d.table.map(x=>`<tr><td>${x.teamInfoId||""}</td><td class="club">${esc(x.teamName||"")}</td><td>${x.matches||0}</td><td>${x.goalsDiff??0}</td><td><b>${x.points||0}</b></td></tr>`).join("")}</tbody></table>`;
-    }else t.innerHTML='<div class="meta">Tabelle wird vor Saisonbeginn vorbereitet.</div>';
-  }catch(e){document.getElementById("liveStatus").textContent="OFFLINE"}
-}
-loadLiveData(); setInterval(loadLiveData,60000);
-
-async function loadAggregatedNews(){
- try{const r=await fetch("/api/news?limit=30"),d=await r.json();const e=document.getElementById("aggregatedNews");
- e.innerHTML=(d.items||[]).map(x=>`<div class="lineitem"><div><b>${esc(x.title)}</b><small>${esc(x.source_name)} · ${new Date(x.published_at).toLocaleString("de-DE")} · ${x.source_count} Quelle${x.source_count==1?"":"n"}</small></div><span class="pill ${x.confidence>=.8?"green":x.confidence>=.5?"yellow":"red"}">${Math.round(x.confidence*100)}%</span></div>`).join("")||'<div class="meta">Keine Feed-Daten konfiguriert.</div>';
- }catch(e){}
-}
-loadAggregatedNews(); setInterval(loadAggregatedNews,60000);
-</script>
-</body>
-</html>
+const nav=[["home","Start"],["live","Live"],["news","News"],["transfers","Transfers"],["injuries","Verletzungen"],["lineups","Aufstellungen"],["table","Tabelle"],["clubs","Vereine"],["players","Spieler"]];
+const $=id=>document.getElementById(id); const esc=v=>String(v??"").replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
+nav.forEach(([id,label])=>{const b=document.createElement("button");b.textContent=label;b.onclick=()=>show(id);$("menu").appendChild(b)});
+function show(id){document.querySelectorAll(".view").forEach(x=>x.classList.toggle("active",x.id===id));document.querySelectorAll("#menu button").forEach((b,i)=>b.classList.toggle("active",nav[i][0]===id));if(id==="live")loadLive();if(id==="news")loadNews();if(id==="transfers")loadTransfers();if(id==="injuries")loadInjuries();if(id==="table")loadTable();if(id==="clubs")loadClubs();if(id==="players")loadPlayers()}
+function toggleMobile(){document.querySelector(".menu").style.display=document.querySelector(".menu").style.display==="flex"?"none":"flex"}
+function globalSearch(){let q=$("search").value.toLowerCase();if(q.length<2)return;show("clubs");document.querySelectorAll(".club").forEach(x=>x.style.display=x.dataset.name.includes(q)?"block":"none")}
+async function api(u){let r=await fetch(u);return await r.json()}
+function renderComments(key){api("/api/comments?post="+encodeURIComponent(key)).then(a=>{const e=$("comments-"+key);if(!e)return;e.innerHTML=a.map(c=>`<div class="comment"><b>${esc(c.user_name)}</b><p>${esc(c.text)}</p><div class="vote"><button onclick="vote(${c.id},'${key}',1)">👍 ${c.up}</button><button onclick="vote(${c.id},'${key}',-1)">👎 ${c.down}</button><button class="replybtn" onclick="toggleReply(${c.id})">↩ Antworten (${c.replies.length})</button></div><div id="r-${c.id}" style="display:none;margin-left:15px">${c.replies.map(r=>`<div class="muted"><b>${esc(r.user_name)}:</b> ${esc(r.text)}</div>`).join("")}<div class="replybox"><input id="ri-${c.id}" placeholder="Antwort…"><button onclick="reply('${key}',${c.id})">Antworten</button></div></div></div>`).join("")})}
+const voter=localStorage.voter||(localStorage.voter="v-"+crypto.randomUUID());
+async function vote(id,key,value){await fetch("/api/vote",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({commentId:id,voterKey:voter,value})});renderComments(key)}
+function toggleReply(id){let e=$("r-"+id);e.style.display=e.style.display==="none"?"block":"none"}
+async function reply(key,id){let v=$("ri-"+id).value.trim();if(!v)return;await fetch("/api/replies",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({commentId:id,text:v,userName:"Du"})});renderComments(key)}
+function community(key){return `<div class="comments"><h3>Community</h3><div id="comments-${key}"></div><div class="commentbox"><input id="ci-${key}" placeholder="Kommentar schreiben…"><button onclick="comment('${key}')">Posten</button></div></div>`}
+async function comment(key){let i=$("ci-"+key),v=i.value.trim();if(!v)return;await fetch("/api/comments",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({postKey:key,text:v,userName:"Du"})});i.value="";renderComments(key)}
+async function loadNews(){let d=await api("/api/news");$("newsList").innerHTML=(d.items||[]).map(x=>`<div class="row"><div><b>${esc(x.title)}</b><small>${esc(x.source)} · ${new Date(x.published_at||Date.now()).toLocaleString("de-DE")}</small></div><span class="status blue">${Math.round((x.trust||.5)*100)}%</span></div>`).join("")||"<p class=muted>Keine Newsquelle konfiguriert.</p>";$("homeNews").innerHTML=$("newsList").innerHTML.slice(0,5000)}
+async function loadMatches(){let d=await api("/api/matches");let a=d.matches||[];let html=a.slice(0,10).map(x=>{let h=x.team1?.teamName||x.teams?.home?.name||"—",g=x.team2?.teamName||x.teams?.away?.name||"—";let sc=x.matchResults?.at(-1);if(x.goals)sc={pointsTeam1:x.goals.home,pointsTeam2:x.goals.away};return `<div class=row><div><b>${esc(h)} – ${esc(g)}</b><small>${x.matchDateTime||x.fixture?.date||""}</small></div><strong>${sc?sc.pointsTeam1+" : "+sc.pointsTeam2:"–"}</strong></div>`}).join("");$("homeMatches").innerHTML=html||"<p class=muted>Keine Spiele verfügbar.</p>"}
+async function loadLive(){let d=await api("/api/live");$("liveBadge").textContent=d.ok?"LIVE":"API KEY";$("liveMatches").innerHTML=(d.matches||[]).map(x=>`<div class=row><div><b>${esc(x.teams.home.name)} – ${esc(x.teams.away.name)}</b><small>${x.fixture.status.elapsed||0}' · ${esc(x.fixture.status.long||"")}</small></div><strong>${x.goals.home} : ${x.goals.away}</strong></div>`).join("")||`<p class=muted>${esc(d.message||"Aktuell keine Live-Spiele.")}</p>`}
+async function loadTable(){let d=await api("/api/table");let arr=d.table?.[0]?.league?.standings?.[0]||d.table||[];$("tableList").innerHTML=`<table class=table><thead><tr><th>#</th><th>Verein</th><th>Sp</th><th>TD</th><th>Pkt</th></tr></thead><tbody>${arr.map((x,i)=>`<tr><td>${x.rank||i+1}</td><td><b>${esc(x.team?.name||x.teamName||"")}</b></td><td>${x.all?.played??x.matches??0}</td><td>${x.goalsDiff??0}</td><td><b>${x.points??0}</b></td></tr>`).join("")}</tbody></table>`}
+async function loadClubs(){let a=await api("/api/clubs");$("clubGrid").innerHTML=a.map((c,i)=>`<button class=club data-name="${c[0].toLowerCase()}" onclick="openClub(${i})"><div class=logo>${c[2]}</div><b>${esc(c[0])}</b><span class=muted>Kader · News · Transfers</span></button>`).join("")}
+let clubData=[];
+async function openClub(i){clubData=await api("/api/clubs");let c=clubData[i];let d=await api("/api/team/"+encodeURIComponent(c[0]));let t=d.team||{};let ps=d.players||[];$("modalBody").innerHTML=`<h2>${esc(t.name||c[0])}</h2><img class=logo src="${esc(t.logo||"")}" onerror="this.style.display='none'"><h3>Kader ${ps.length?"("+ps.length+")":""}</h3><div class=playergrid>${ps.map(x=>`<div class=player onclick="openPlayer(${x.id})"><img src="${esc(x.photo||"")}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 200 200%22%3E%3Crect width=%22200%22 height=%22200%22 fill=%22%23eef2f6%22/%3E%3C/svg%3E'"><b>${esc(x.name)}</b><span class=muted>${esc(x.position||"")} ${x.number?"· #"+x.number:""}</span></div>`).join("")}</div>${community("club-"+i)}`;$("modal").classList.add("open");renderComments("club-"+i)}
+async function loadPlayers(){let d=await api("/api/clubs"),out=[];for(let i=0;i<d.length;i++){let x=await api("/api/team/"+encodeURIComponent(d[i][0]));out.push(...(x.players||[]).map(p=>({...p,club:d[i][0]})))}$("playerGrid").innerHTML=out.map(x=>`<div class=player onclick="openPlayer(${x.id})"><img src="${esc(x.photo||"")}" onerror="this.style.visibility='hidden'"><b>${esc(x.name)}</b><span class=muted>${esc(x.club)} · ${esc(x.position||"")}</span></div>`).join("")||"<p class=muted>Spielerdaten werden geladen, sobald SPORTS_API_KEY gesetzt ist.</p>"}
+async function openPlayer(id){let d=await api("/api/player/"+id);let x=d.items?.[0]?.player||d.items?.[0];$("modalBody").innerHTML=x?`<img class=logo src="${esc(x.photo||"")}"><h2>${esc(x.name)}</h2><p class=muted>${esc(x.nationality||"")} · ${esc(x.age||"")} Jahre · ${esc(x.height||"")}</p><h3>Saisonstatistik</h3><p>${x.stats?.map(s=>`${s.games?.appearences||0} Einsätze · ${s.goals?.total||0} Tore · ${s.goals?.assists||0} Assists`).join("<br>")||"Keine Statistik verfügbar."}</p>${community("player-"+id)}`:"<p>Spielerdaten nicht verfügbar.</p>";$("modal").classList.add("open");renderComments("player-"+id)}
+async function loadTransfers(){let d=await api("/api/transfers");$("transferList").innerHTML=(d.items||[]).slice(0,50).map(x=>`<div class=row><div><b>${esc(x.player?.name||"Spieler")}</b><small>${esc(x.transfers?.[0]?.teams?.out?.name||"")} → ${esc(x.transfers?.[0]?.teams?.in?.name||"")}</small></div><span class="status good">Transfer</span></div>`).join("")||"<p class=muted>"+esc(d.message||"Keine Transferdaten verfügbar.")+"</p>";$("rumorList").innerHTML="<p class=muted>Gerüchte werden aus den konfigurierten Newsquellen aggregiert und separat bewertet.</p>"}
+async function loadInjuries(){let d=await api("/api/injuries");$("injuryList").innerHTML=(d.items||[]).slice(0,80).map(x=>`<div class=row><div><b>${esc(x.player?.name)}</b><small>${esc(x.team?.name)} · ${esc(x.injury?.type||"")} · ${esc(x.injury?.reason||"")}</small></div><span class="status bad">Ausfall</span></div>`).join("")||"<p class=muted>"+esc(d.message||"Keine Verletzungsdaten verfügbar.")+"</p>"}
+async function loadLineups(){let d=await api("/api/matches");$("lineupList").innerHTML=(d.matches||[]).slice(0,10).map(x=>`<div class=row><div><b>${esc(x.teams?.home?.name||x.team1?.teamName||"")} – ${esc(x.teams?.away?.name||x.team2?.teamName||"")}</b><small>${x.fixture?.date||x.matchDateTime||""}</small></div><span class=status blue>XI</span></div>`).join("")||"<p class=muted>Keine Spiele verfügbar.</p>"}
+function closeModal(){$("modal").classList.remove("open")}
+loadNews();loadMatches();loadClubs();show("home");setInterval(loadLive,20000);setInterval(loadMatches,60000);setInterval(loadNews,60000);
+</script></body></html>

@@ -1,92 +1,20 @@
 [
-  [
-    "FC Bayern München",
-    "Bayern München",
-    "FCB"
-  ],
-  [
-    "Borussia Dortmund",
-    "Borussia Dortmund",
-    "BVB"
-  ],
-  [
-    "RB Leipzig",
-    "RB Leipzig",
-    "RBL"
-  ],
-  [
-    "VfB Stuttgart",
-    "VfB Stuttgart",
-    "VFB"
-  ],
-  [
-    "Bayer 04 Leverkusen",
-    "Bayer Leverkusen",
-    "B04"
-  ],
-  [
-    "Eintracht Frankfurt",
-    "Eintracht Frankfurt",
-    "SGE"
-  ],
-  [
-    "SC Freiburg",
-    "SC Freiburg",
-    "SCF"
-  ],
-  [
-    "1. FSV Mainz 05",
-    "Mainz",
-    "M05"
-  ],
-  [
-    "TSG Hoffenheim",
-    "Hoffenheim",
-    "TSG"
-  ],
-  [
-    "Werder Bremen",
-    "Werder Bremen",
-    "SVW"
-  ],
-  [
-    "Borussia Mönchengladbach",
-    "Borussia M'gladbach",
-    "BMG"
-  ],
-  [
-    "FC Augsburg",
-    "FC Augsburg",
-    "FCA"
-  ],
-  [
-    "1. FC Union Berlin",
-    "Union Berlin",
-    "FCU"
-  ],
-  [
-    "1. FC Köln",
-    "FC Köln",
-    "KOE"
-  ],
-  [
-    "Hamburger SV",
-    "Hamburger SV",
-    "HSV"
-  ],
-  [
-    "FC Schalke 04",
-    "Schalke 04",
-    "S04"
-  ],
-  [
-    "SC Paderborn 07",
-    "Paderborn",
-    "SCP"
-  ],
-  [
-    "SV Elversberg",
-    "Elversberg",
-    "ELV"
-  ]
+  "FC Bayern München",
+  "Borussia Dortmund",
+  "RB Leipzig",
+  "VfB Stuttgart",
+  "Bayer 04 Leverkusen",
+  "Eintracht Frankfurt",
+  "SC Freiburg",
+  "1. FSV Mainz 05",
+  "TSG Hoffenheim",
+  "Werder Bremen",
+  "Borussia Mönchengladbach",
+  "FC Augsburg",
+  "1. FC Union Berlin",
+  "1. FC Köln",
+  "Hamburger SV",
+  "FC Schalke 04",
+  "SC Paderborn 07",
+  "SV Elversberg"
 ]

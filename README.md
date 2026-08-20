@@ -1,37 +1,45 @@
-# Bundesliga Hub – final GitHub version
+# Bundesliga Hub – korrigierte Version
 
-A responsive Bundesliga portal with menu-based sections, club pages, player profiles, automatic live data, persistent community and a multi-source news layer.
+## Wichtig: Nicht `public/index.html` doppelt anklicken
+Die Website besteht aus Frontend **und** Node.js-Backend. Wenn `index.html` direkt geöffnet wird (`file://...`), funktionieren `/api/...` nicht. Genau das war der Hauptgrund, warum die vorherige Version scheinbar nicht funktioniert hat.
 
-## Main sections
-- Home
-- Live
-- News
-- Transfers
-- Verletzungen
-- Aufstellungen
-- Tabelle
-- Vereine
-- Spieler
+## Windows
+Node.js 20+ installieren und danach im Projektordner `start.bat` doppelklicken.
 
-## Data architecture
-- OpenLigaDB fallback for Bundesliga matches/table
-- API-Football adapter for live scores, teams, squads, players, transfers, injuries and lineups when `SPORTS_API_KEY` is configured
-- RSS/Atom aggregation for explicitly configured permitted feeds
-- SQLite for comments, votes, replies and cached normalized data
-- no API secrets in the frontend
-
-API-Football documents live fixtures, lineups, players, transfers and injuries; its live fixture data is intended for frequent polling. It also returns player photos and team data. See the provider documentation before production use.
-
-## Run
-Node.js 20+
+Oder im Terminal:
 ```bash
 npm install
 npm start
 ```
-Open http://localhost:3000
+Dann im Browser öffnen:
+`http://localhost:3000`
 
 ## GitHub
-Upload the repository contents. Never commit `.env` or the SQLite database.
+GitHub speichert den Code. GitHub Pages kann dieses Node.js-Backend nicht ausführen. Für eine echte automatische Website das Repository auf einen Node-Host deployen, z.B. Render. Eine `render.yaml` ist enthalten.
 
-## Production
-Use a persistent database/volume and HTTPS. Set `SPORTS_API_KEY` on the hosting platform. For news, configure only feeds whose terms/licensing permit automated retrieval. The app stores headlines, short excerpts, source URLs and metadata rather than copying full articles.
+Auf Render:
+- Build: `npm install`
+- Start: `npm start`
+- `SPORTS_API_KEY` als Secret setzen
+- für SQLite den persistenten Datenträger aus `render.yaml` verwenden
+
+## Daten
+Ohne `SPORTS_API_KEY`:
+- Spielplan: OpenLigaDB
+- Tabelle: OpenLigaDB
+- Vereine: eingebaut
+- Community: SQLite
+
+Mit `SPORTS_API_KEY`:
+- Live-Spielstände
+- Kader
+- Spielerbilder
+- Spielerprofile
+- Transfers
+- Verletzungen
+- weitere Sportdaten
+
+API-Football dokumentiert Fixtures, Live-Scores, Teams, Standings, Lineups, Players, Transfers und Injuries. OpenLigaDB stellt öffentliche Bundesliga-Spiel- und Tabellendaten bereit.
+
+## API-Key niemals in GitHub speichern
+Nur als Environment Variable auf dem Server setzen.

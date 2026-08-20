@@ -3,7 +3,39 @@ const Database=require("better-sqlite3");
 const db=new Database(process.env.DB_FILE||"bundesliga.db");db.pragma("journal_mode=WAL");
 db.exec(`CREATE TABLE IF NOT EXISTS comments(id INTEGER PRIMARY KEY AUTOINCREMENT,post_key TEXT,user_name TEXT,text TEXT,created_at TEXT DEFAULT CURRENT_TIMESTAMP,up INTEGER DEFAULT 0,down INTEGER DEFAULT 0);
 CREATE TABLE IF NOT EXISTS replies(id INTEGER PRIMARY KEY AUTOINCREMENT,comment_id INTEGER,user_name TEXT,text TEXT,created_at TEXT DEFAULT CURRENT_TIMESTAMP);
-CREATE TABLE IF NOT EXISTS votes(comment_id INTEGER,voter_key TEXT,value INTEGER,PRIMARY KEY(comment_id,voter_key));`);
+CREATE TABLE IF NOT EXISTS votes(comment_id INTEGER,voter_key TEXT,value INTEGER,PRIMARY KEY(comment_id,voter_key));
+CREATE TABLE IF NOT EXISTS news(id INTEGER PRIMARY KEY AUTOINCREMENT,source TEXT,title TEXT,excerpt TEXT,url TEXT UNIQUE,published_at TEXT,category TEXT,trust REAL);
+`);
+
+const FEEDS=[
+ {source:"Sportschau",url:"https://www.sportschau.de/fussball/bundesliga~rss2.xml",trust:.92},
+ {source:"kicker",url:"https://newsfeed.kicker.de/bundesliga",trust:.90}
+];
+function stripTags(x){return String(x||"").replace(/<[^>]+>/g," ").replace(/\s+/g," ").trim()}
+function categoryFor(t){const x=t.toLowerCase();if(/verletz|ausfall|krank|sperr|operation|comeback/.test(x))return "injury";if(/transfer|wechselt|wechsel|leihe|ablöse|verpflichtet|gerücht|interesse/.test(x))return "transfer";return "news"}
+function parseFeed(xml){
+ const blocks=xml.match(/<item[\s\S]*?<\/item>/gi)||xml.match(/<entry[\s\S]*?<\/entry>/gi)||[];
+ return blocks.map(b=>{
+  const title=(b.match(/<title[^>]*>([\s\S]*?)<\/title>/i)||[])[1];
+  const link=(b.match(/<link[^>]*href=["']([^"']+)["']/i)||[])[1]||(b.match(/<link[^>]*>([\s\S]*?)<\/link>/i)||[])[1];
+  const desc=(b.match(/<(description|summary|content)[^>]*>([\s\S]*?)<\/(description|summary|content)>/i)||[])[2];
+  const date=(b.match(/<(pubDate|published|updated)[^>]*>([\s\S]*?)<\/(pubDate|published|updated)>/i)||[])[2];
+  return title&&link?{title:stripTags(title),excerpt:stripTags(desc).slice(0,400),url:stripTags(link),published_at:date?new Date(stripTags(date)).toISOString():new Date().toISOString()}:null;
+ }).filter(Boolean);
+}
+function getRaw(url,headers={}){return new Promise((ok,no)=>{const r=https.get(url,{headers},res=>{let s="";res.on("data",c=>s+=c);res.on("end",()=>ok({status:res.statusCode,text:s}))});r.setTimeout(12000,()=>{r.destroy();no(new Error("timeout"))});r.on("error",no)})}
+async function syncNews(){
+ for(const f of FEEDS){
+  try{
+   const r=await getRaw(f.url,{"User-Agent":"BundesligaHub/1.0","Accept":"application/rss+xml, application/atom+xml, text/xml"});
+   if(r.status>=400)continue;
+   const ins=db.prepare("INSERT OR IGNORE INTO news(source,title,excerpt,url,published_at,category,trust) VALUES(?,?,?,?,?,?,?)");
+   const tx=db.transaction(items=>items.forEach(x=>ins.run(f.source,x.title,x.excerpt,x.url,x.published_at,categoryFor(x.title),f.trust)));
+   tx(parseFeed(r.text));
+  }catch(e){}
+ }
+}
+
 const PORT=process.env.PORT||3000,BASE=process.env.SPORTS_API_BASE||"https://v3.football.api-sports.io",KEY=process.env.SPORTS_API_KEY;
 const pub=path.join(__dirname,"public"),clubs=JSON.parse(fs.readFileSync(path.join(__dirname,"data/clubs.json")));
 function json(res,s,d){res.writeHead(s,{"Content-Type":"application/json; charset=utf-8","Cache-Control":"no-store"});res.end(JSON.stringify(d))}
@@ -18,7 +50,14 @@ async function route(req,res){
   if(req.method==="POST"&&req.url==="/api/comments"){const b=await body(req);const r=db.prepare("INSERT INTO comments(post_key,user_name,text) VALUES(?,?,?)").run(b.postKey,b.userName||"Du",String(b.text||"").slice(0,1500));return json(res,201,{id:r.lastInsertRowid})}
   if(req.method==="POST"&&req.url==="/api/replies"){const b=await body(req);const r=db.prepare("INSERT INTO replies(comment_id,user_name,text) VALUES(?,?,?)").run(+b.commentId,b.userName||"Du",String(b.text||"").slice(0,1500));return json(res,201,{id:r.lastInsertRowid})}
   if(req.method==="POST"&&req.url==="/api/vote"){const b=await body(req),id=+b.commentId,v=String(b.voterKey),val=+b.value;const old=db.prepare("SELECT value FROM votes WHERE comment_id=? AND voter_key=?").get(id,v);const tx=db.transaction(()=>{if(old)db.prepare("DELETE FROM votes WHERE comment_id=? AND voter_key=?").run(id,v);if(val)db.prepare("INSERT INTO votes VALUES(?,?,?)").run(id,v,val);const x=db.prepare("SELECT value,COUNT(*) n FROM votes WHERE comment_id=? GROUP BY value").all(id);db.prepare("UPDATE comments SET up=?,down=? WHERE id=?").run(x.find(a=>a.value===1)?.n||0,x.find(a=>a.value===-1)?.n||0,id)});tx();return json(res,200,{ok:true})}
-  if(req.method==="GET"&&req.url==="/api/clubs")return json(res,200,clubs);
+  if(req.method==="GET"&&req.url==="/api/clubs"){
+   let logos={};try{for(const x of await openliga("/getbltable/bl1/2026"))logos[x.teamName]=x.teamIconUrl||""}catch(e){}
+   return json(res,200,clubs.map(n=>({name:n,logo:logos[n]||""})));
+  }
+  if(req.method==="GET"&&req.url.startsWith("/api/news")){
+   await syncNews();
+   return json(res,200,{items:db.prepare("SELECT * FROM news ORDER BY datetime(published_at) DESC LIMIT 80").all()});
+  }
   if(req.method==="GET"&&req.url==="/api/status")return json(res,200,{backend:true,sportsApi:!!KEY});
   if(req.method==="GET"&&req.url==="/api/matches"){try{if(KEY)return json(res,200,{source:"API-Football",data:await sport("/fixtures",{league:78,season:2026,next:30,timezone:"Europe/Berlin"})})}catch(e){}return json(res,200,{source:"OpenLigaDB",data:await openliga("/getmatchdata/bl1/2026")})}
   if(req.method==="GET"&&req.url==="/api/live"){if(!KEY)return json(res,200,{ok:false,message:"Echte Live-Daten benötigen SPORTS_API_KEY."});return json(res,200,{ok:true,data:await sport("/fixtures",{league:78,live:"all",timezone:"Europe/Berlin"})})}
@@ -26,7 +65,10 @@ async function route(req,res){
   if(req.method==="GET"&&req.url==="/api/transfers"){if(!KEY)return json(res,200,{data:[],message:"Transfers benötigen SPORTS_API_KEY."});const ts=await sport("/teams",{league:78,season:2026}),out=[];for(const t of ts){try{out.push(...await sport("/transfers",{team:t.team.id}))}catch(e){}}return json(res,200,{data:out})}
   if(req.method==="GET"&&req.url==="/api/injuries"){if(!KEY)return json(res,200,{data:[],message:"Verletzungen benötigen SPORTS_API_KEY."});return json(res,200,{data:await sport("/injuries",{league:78,season:2026})})}
   if(req.method==="GET"&&req.url.startsWith("/api/team/")){
-    const name=decodeURIComponent(req.url.slice(10));if(!KEY)return json(res,200,{team:{name},players:[],lineup:null,message:"Für Kader, Bilder und S11 SPORTS_API_KEY konfigurieren."});
+    const name=decodeURIComponent(req.url.slice(10));if(!KEY){
+    let logo="";try{const tt=await openliga("/getbltable/bl1/2026");logo=tt.find(x=>x.teamName.toLowerCase()===name.toLowerCase())?.teamIconUrl||""}catch(e){}
+    return json(res,200,{team:{name,logo},players:[],lineup:null,message:"Für Kader, Bilder und S11 SPORTS_API_KEY konfigurieren."});
+  }
     const ts=await sport("/teams",{league:78,season:2026}),t=ts.find(x=>x.team.name.toLowerCase()===name.toLowerCase()||x.team.name.toLowerCase().includes(name.toLowerCase()));
     if(!t)return json(res,404,{error:"Verein nicht gefunden"});const sq=await sport("/players/squads",{team:t.team.id});
     return json(res,200,{team:t.team,players:sq[0]?.players||[],lineup:null});
